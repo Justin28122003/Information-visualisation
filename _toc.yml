@@ -5,5 +5,4 @@ format: jb-book
 root: docs/home
 chapters:
 - file: docs/notebook
-- file: docs/format kopie
-  title: test
+- file: docs/website
