@@ -23,93 +23,60 @@ Traceback (most recent call last):
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
 import pandas as pd
-import plotly.express as px
-from ipywidgets import interact, widgets, HBox, VBox, Layout, interactive_output
-import pycountry
+import plotly.graph_objects as go
 
-csv_path = "IHME_mental_real.csv"
-df2 = pd.read_csv(csv_path)
+# Laad data
+df = pd.read_csv("MentalHealthSurvey.csv")
 
-def get_iso3(country_name):
-    try:
-        return pycountry.countries.lookup(country_name).alpha_3
-    except LookupError:
-        return None
+# Schoon CGPA-categorieën op
+df['cgpa'] = df['cgpa'].str.strip()
 
-df2["iso_alpha"] = df2["location"].apply(get_iso3)
+# Relevante mentale gezondheidsdimensies
+mental_columns = ['depression', 'anxiety', 'isolation', 'future_insecurity', 'academic_pressure']
 
-# missing_iso = df2[df2["iso_alpha"].isna()]["location"].unique()
-# print("Ontbrekende ISO3 codes:", missing_iso)
+# Bereken gemiddelden per CGPA-groep
+grouped = df.groupby('cgpa')[mental_columns].mean()
 
-df2["val_display"] = df2.apply(lambda row: row["val"] * 100 if row["metric"] == "Percent" else row["val"], axis=1)
+# Sorteer in logische volgorde
+cgpa_order = ['<2.5', '2.5-3.0', '3.0-3.5', '3.5-4.0']
+grouped = grouped.loc[[g for g in cgpa_order if g in grouped.index]]
 
-years = sorted(df2["year"].unique())
-sexes = sorted(df2["sex"].unique())
-metrics = sorted(df2["metric"].unique())
+# Maak radar chart
+fig = go.Figure()
 
-def plot_map(year, sex, metric):
-    dff = df2[(df2["year"] == year) & (df2["sex"] == sex) & (df2["metric"] == metric)]
-    if dff.empty:
-        print("Geen data voor deze combinatie")
-        return
-    
-    if metric == "Percent":
-        color_range = [0, 20] # HARDCODE AANPASSEN
-    else:
-        color_range = [df2["val_display"].min(), df2["val_display"].max()]
-    
-    fig = px.choropleth(
-        dff,
-        locations="iso_alpha",
-        color="val_display",
-        hover_name="location",
-        color_continuous_scale="Reds",
-        range_color=color_range,
-        labels={"val_display": f"Prevalentie ({metric})"},
-        title=f"Mental disorders - {sex} - {metric} - {year}"
-    )
-    fig.update_layout(
-        geo=dict(showframe=False, showcoastlines=True, projection_type='natural earth'),
-        width=900,
-        height=600,
-        margin={"r":0,"t":40,"l":0,"b":0}
-    )
-    fig.show()
+for cgpa in grouped.index:
+    fig.add_trace(go.Scatterpolar(
+        r=grouped.loc[cgpa].values,
+        theta=mental_columns,
+        fill='toself',
+        name=f'CGPA {cgpa}'
+    ))
 
-year_slider = widgets.SelectionSlider(options=years, description="Jaar", continuous_update=False, layout=Layout(width='35%'))
-sex_dropdown = widgets.Dropdown(options=sexes, description="Sekse", layout=Layout(width='150px'))
-metric_dropdown = widgets.Dropdown(options=metrics, description="Metric", layout=Layout(width='150px'))
+fig.update_layout(
+    title='Mentale Gezondheid per CGPA-groep',
+    polar=dict(
+        radialaxis=dict(
+            visible=True,
+            range=[0, 5]
+        )
+    ),
+    showlegend=True
+)
 
-ui_top = HBox([sex_dropdown, metric_dropdown], layout=Layout(justify_content='flex-end', width='350px'))
-ui = VBox([ui_top, year_slider])
+fig.show()
 
-out = widgets.Output()
-
-def on_change(change):
-    with out:
-        out.clear_output(wait=True)
-        plot_map(year_slider.value, sex_dropdown.value, metric_dropdown.value)
-
-year_slider.observe(on_change, names='value')
-sex_dropdown.observe(on_change, names='value')
-metric_dropdown.observe(on_change, names='value')
-
-display(ui, out)
-
-with out:
-    plot_map(years[0], sexes[0], metrics[0])
 
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mFileNotFoundError[0m                         Traceback (most recent call last)
-Cell [0;32mIn[1], line 7[0m
-[1;32m      4[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mpycountry[39;00m
-[1;32m      6[0m csv_path [38;5;241m=[39m [38;5;124m"[39m[38;5;124mIHME_mental_real.csv[39m[38;5;124m"[39m
-[0;32m----> 7[0m df2 [38;5;241m=[39m [43mpd[49m[38;5;241;43m.[39;49m[43mread_csv[49m[43m([49m[43mcsv_path[49m[43m)[49m
-[1;32m      9[0m [38;5;28;01mdef[39;00m[38;5;250m [39m[38;5;21mget_iso3[39m(country_name):
-[1;32m     10[0m     [38;5;28;01mtry[39;00m:
+Cell [0;32mIn[2], line 5[0m
+[1;32m      2[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01mgraph_objects[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01mgo[39;00m
+[1;32m      4[0m [38;5;66;03m# Laad data[39;00m
+[0;32m----> 5[0m df [38;5;241m=[39m [43mpd[49m[38;5;241;43m.[39;49m[43mread_csv[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43mMentalHealthSurvey.csv[39;49m[38;5;124;43m"[39;49m[43m)[49m
+[1;32m      7[0m [38;5;66;03m# Schoon CGPA-categorieën op[39;00m
+[1;32m      8[0m df[[38;5;124m'[39m[38;5;124mcgpa[39m[38;5;124m'[39m] [38;5;241m=[39m df[[38;5;124m'[39m[38;5;124mcgpa[39m[38;5;124m'[39m][38;5;241m.[39mstr[38;5;241m.[39mstrip()
 
 File [0;32m~/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/pandas/io/parsers/readers.py:1026[0m, in [0;36mread_csv[0;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)[0m
 [1;32m   1013[0m kwds_defaults [38;5;241m=[39m _refine_defaults_read(
@@ -166,5 +133,5 @@ File [0;32m~/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/pandas/io
 [1;32m    881[0m         [38;5;66;03m# Binary mode[39;00m
 [1;32m    882[0m         handle [38;5;241m=[39m [38;5;28mopen[39m(handle, ioargs[38;5;241m.[39mmode)
 
-[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: 'IHME_mental_real.csv'
+[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: 'MentalHealthSurvey.csv'
 
