@@ -26,6 +26,10 @@ html:
   use_issues_button: true
   use_repository_button: true
 
+html:
+  show_input: false   # ⬅️ verberg standaard de code
+  show_output: true   # ⬅️ laat output (zoals grafieken) zien
+
 # Add launch buttons
 launch_buttons:
   binderhub_url: ""
