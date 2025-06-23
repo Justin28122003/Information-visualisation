@@ -1,4 +1,4 @@
-# Jupyter Book Tutorial
+# jhsdfomsdfg jallloooooooooo
 
 (Last updated: May 27, 2025)
 
@@ -15,8 +15,8 @@ For more advanced usage of Jupyter Book (e.g., using this special content block,
 
 ## Table of contents
 - [Prerequisites](#pre)
-- [Step 1: Install conda](#s1)
-- [Step 2: Install Jupyter Book](#s2)
+- [Sstop](#s1)
+- [Slay](#s2)
 - [Step 3: Create a new repository](#s2)
 - [Step 4: Build the book locally](#s4)
 - [Step 5: Deploy the book online](#s5)
