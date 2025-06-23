@@ -175,7 +175,11 @@
             </li>
         </ul>
         <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="website.html">Sociale Media en Mentale Gezondheid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="website.html">Mentale Gezondheid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reflection.html">Reflection</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="distribution.html">Distribution</a></li>
 
 </ul>
 
@@ -447,7 +451,7 @@ The GitHub Desktop will guide you through the setup process, and in this way, yo
 You must <a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">create a personal access token</a> and use the token when pushing changes to a GitHub repository.
 To do so, go to <a class="reference external" href="https://github.com/settings/tokens">this page</a> to create a classic token (not the fine-grained token).
 You also need to give the token proper access permissions/scopes, as indicated in the following image:</p>
-<p><img alt="token_scope" src="../_images/token_scope.png" /></p>
+<p><img alt="token_scope" src="docs/images/token_scope.png" /></p>
 <p>You can also choose to <a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github">use other authentication methods</a>, such as using SSH keys.</p>
 </section>
 <section id="install-the-environment-to-run-jupyter-notebook">
@@ -690,7 +694,7 @@ conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> <
 </div>
 <p>After this, go to the URL that points to your GitHub repository, click “Settings” -&gt; “Pages” to go to the page settings.
 You should see a message similar to “Your site is live at [XXX]”, where “[XXX]” is your website URL that is publicly accessible, as shown below:</p>
-<p><img alt="github_page_url" src="../_images/github_page_url.png" /></p>
+<p><img alt="github_page_url" src="docs/images/github_page_url.png" /></p>
 <p>Also, sometimes it will take a while for GitHub to update your webpage content.
 You can check the “Actions” page to check the status.
 For example, here is the <a class="reference external" href="https://github.com/yenchiah/jupyter-book-template/actions">Actions page for our tutorial repository</a>.</p>
@@ -730,11 +734,11 @@ ghp-import<span class="w"> </span>-n<span class="w"> </span>-p<span class="w"> <
 <p>Every time you build some new files (or updated files), you need to rebuild the book and push new changes to your remote GitHub repository.
 This, again, will take some time for GitHub to process the changes and update the website.
 You can check the Actions page (as shown in the image below) for the status.</p>
-<p><img alt="actions_page" src="../_images/actions_page.png" /></p>
+<p><img alt="actions_page" src="docs/images/actions_page.png" /></p>
 <p>If the Actions page shows that the status is good with a green checkmark (as shown in the image below), it means that the webpage is successfully updated.
 If you still do not see the changes on your browser, either wait for a while or clear the browser cache.
 Search online (e.g., Google) to know how to clear your browser cache.</p>
-<p><img alt="page_updated" src="../_images/page_updated.png" /></p>
+<p><img alt="page_updated" src="docs/images/page_updated.png" /></p>
 <p>If you have multiple notebook files that you want to add to the website, you will need to edit the <code class="docutils literal notranslate"><span class="pre">_toc.yml</span></code> file.
 Check <a class="reference external" href="https://jupyterbook.org/en/stable/basics/organize.html">this Jupyter Book documentation</a> about how to edit the table of content.</p>
 </section>
