@@ -1,0 +1,100 @@
+Traceback (most recent call last):
+  File "/Users/justin_v_egmond/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 154, in wrapped
+    asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/justin_v_egmond/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/Users/justin_v_egmond/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/nbclient/client.py", line 1319, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/Users/justin_v_egmond/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 158, in wrapped
+    return loop.run_until_complete(inner)
+  File "/Users/justin_v_egmond/miniconda3/envs/jupyterbook/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/Users/justin_v_egmond/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/Users/justin_v_egmond/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Users/justin_v_egmond/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Filter op leeftijdsgroep 20–29
+df_20_29 = df[df['age_group'] == '20-29']
+
+plt.figure(figsize=(10, 6))
+sns.regplot(
+    data=df_20_29,
+    x='social_media_hours',
+    y='stress_level',
+    scatter_kws={'alpha': 0.6},
+    line_kws={'color': 'red'},
+    lowess=True  # Voor vloeiendere (niet-lineaire) trend
+)
+
+plt.title('Stressniveau versus socialmediagebruik (leeftijd 20-29)')
+plt.xlabel('Social media gebruik (uren per dag)')
+plt.ylabel('Stressniveau')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mRuntimeError[0m                              Traceback (most recent call last)
+Cell [0;32mIn[6], line 8[0m
+[1;32m      5[0m df_20_29 [38;5;241m=[39m df[df[[38;5;124m'[39m[38;5;124mage_group[39m[38;5;124m'[39m] [38;5;241m==[39m [38;5;124m'[39m[38;5;124m20-29[39m[38;5;124m'[39m]
+[1;32m      7[0m plt[38;5;241m.[39mfigure(figsize[38;5;241m=[39m([38;5;241m10[39m, [38;5;241m6[39m))
+[0;32m----> 8[0m [43msns[49m[38;5;241;43m.[39;49m[43mregplot[49m[43m([49m
+[1;32m      9[0m [43m    [49m[43mdata[49m[38;5;241;43m=[39;49m[43mdf_20_29[49m[43m,[49m
+[1;32m     10[0m [43m    [49m[43mx[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43msocial_media_hours[39;49m[38;5;124;43m'[39;49m[43m,[49m
+[1;32m     11[0m [43m    [49m[43my[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mstress_level[39;49m[38;5;124;43m'[39;49m[43m,[49m
+[1;32m     12[0m [43m    [49m[43mscatter_kws[49m[38;5;241;43m=[39;49m[43m{[49m[38;5;124;43m'[39;49m[38;5;124;43malpha[39;49m[38;5;124;43m'[39;49m[43m:[49m[43m [49m[38;5;241;43m0.6[39;49m[43m}[49m[43m,[49m
+[1;32m     13[0m [43m    [49m[43mline_kws[49m[38;5;241;43m=[39;49m[43m{[49m[38;5;124;43m'[39;49m[38;5;124;43mcolor[39;49m[38;5;124;43m'[39;49m[43m:[49m[43m [49m[38;5;124;43m'[39;49m[38;5;124;43mred[39;49m[38;5;124;43m'[39;49m[43m}[49m[43m,[49m
+[1;32m     14[0m [43m    [49m[43mlowess[49m[38;5;241;43m=[39;49m[38;5;28;43;01mTrue[39;49;00m[43m  [49m[38;5;66;43;03m# Voor vloeiendere (niet-lineaire) trend[39;49;00m
+[1;32m     15[0m [43m)[49m
+[1;32m     17[0m plt[38;5;241m.[39mtitle([38;5;124m'[39m[38;5;124mStressniveau versus socialmediagebruik (leeftijd 20-29)[39m[38;5;124m'[39m)
+[1;32m     18[0m plt[38;5;241m.[39mxlabel([38;5;124m'[39m[38;5;124mSocial media gebruik (uren per dag)[39m[38;5;124m'[39m)
+
+File [0;32m~/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/seaborn/regression.py:775[0m, in [0;36mregplot[0;34m(data, x, y, x_estimator, x_bins, x_ci, scatter, fit_reg, ci, n_boot, units, seed, order, logistic, lowess, robust, logx, x_partial, y_partial, truncate, dropna, x_jitter, y_jitter, label, color, marker, scatter_kws, line_kws, ax)[0m
+[1;32m    773[0m scatter_kws[[38;5;124m"[39m[38;5;124mmarker[39m[38;5;124m"[39m] [38;5;241m=[39m marker
+[1;32m    774[0m line_kws [38;5;241m=[39m {} [38;5;28;01mif[39;00m line_kws [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m [38;5;28;01melse[39;00m copy[38;5;241m.[39mcopy(line_kws)
+[0;32m--> 775[0m [43mplotter[49m[38;5;241;43m.[39;49m[43mplot[49m[43m([49m[43max[49m[43m,[49m[43m [49m[43mscatter_kws[49m[43m,[49m[43m [49m[43mline_kws[49m[43m)[49m
+[1;32m    776[0m [38;5;28;01mreturn[39;00m ax
+
+File [0;32m~/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/seaborn/regression.py:384[0m, in [0;36m_RegressionPlotter.plot[0;34m(self, ax, scatter_kws, line_kws)[0m
+[1;32m    381[0m     [38;5;28mself[39m[38;5;241m.[39mscatterplot(ax, scatter_kws)
+[1;32m    383[0m [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39mfit_reg:
+[0;32m--> 384[0m     [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mlineplot[49m[43m([49m[43max[49m[43m,[49m[43m [49m[43mline_kws[49m[43m)[49m
+[1;32m    386[0m [38;5;66;03m# Label the axes[39;00m
+[1;32m    387[0m [38;5;28;01mif[39;00m [38;5;28mhasattr[39m([38;5;28mself[39m[38;5;241m.[39mx, [38;5;124m"[39m[38;5;124mname[39m[38;5;124m"[39m):
+
+File [0;32m~/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/seaborn/regression.py:429[0m, in [0;36m_RegressionPlotter.lineplot[0;34m(self, ax, kws)[0m
+[1;32m    427[0m [38;5;250m[39m[38;5;124;03m"""Draw the model."""[39;00m
+[1;32m    428[0m [38;5;66;03m# Fit the regression model[39;00m
+[0;32m--> 429[0m grid, yhat, err_bands [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mfit_regression[49m[43m([49m[43max[49m[43m)[49m
+[1;32m    430[0m edges [38;5;241m=[39m grid[[38;5;241m0[39m], grid[[38;5;241m-[39m[38;5;241m1[39m]
+[1;32m    432[0m [38;5;66;03m# Get set default aesthetics[39;00m
+
+File [0;32m~/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/seaborn/regression.py:198[0m, in [0;36m_RegressionPlotter.fit_regression[0;34m(self, ax, x_range, grid)[0m
+[1;32m    196[0m [38;5;28;01mdef[39;00m[38;5;250m [39m[38;5;21mfit_regression[39m([38;5;28mself[39m, ax[38;5;241m=[39m[38;5;28;01mNone[39;00m, x_range[38;5;241m=[39m[38;5;28;01mNone[39;00m, grid[38;5;241m=[39m[38;5;28;01mNone[39;00m):
+[1;32m    197[0m [38;5;250m    [39m[38;5;124;03m"""Fit the regression model."""[39;00m
+[0;32m--> 198[0m     [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_check_statsmodels[49m[43m([49m[43m)[49m
+[1;32m    200[0m     [38;5;66;03m# Create the grid for the regression[39;00m
+[1;32m    201[0m     [38;5;28;01mif[39;00m grid [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+
+File [0;32m~/miniconda3/envs/jupyterbook/lib/python3.10/site-packages/seaborn/regression.py:194[0m, in [0;36m_RegressionPlotter._check_statsmodels[0;34m(self)[0m
+[1;32m    192[0m [38;5;28;01mfor[39;00m option [38;5;129;01min[39;00m options:
+[1;32m    193[0m     [38;5;28;01mif[39;00m [38;5;28mgetattr[39m([38;5;28mself[39m, option) [38;5;129;01mand[39;00m [38;5;129;01mnot[39;00m _has_statsmodels:
+[0;32m--> 194[0m         [38;5;28;01mraise[39;00m [38;5;167;01mRuntimeError[39;00m(err[38;5;241m.[39mformat(option))
+
+[0;31mRuntimeError[0m: `lowess=True` requires statsmodels, an optional dependency, to be installed.
+
