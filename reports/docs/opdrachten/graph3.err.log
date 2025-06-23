@@ -47,7 +47,7 @@ fig = px.box(
     points='all',
     title='Angstniveau per Stressverlichtende Activiteit',
     labels={
-        'anxiety': 'Angstscore',
+        'depressie': 'depression',
         'stress_relief_activities': 'Activiteit'
     }
 )
