@@ -4,7 +4,7 @@
 format: jb-book
 root: docs/introduction
 chapters:
-- file: docs/introduction
+# - file: docs/introduction
 - file: docs/dataset
 - file: docs/website
 - file: docs/reflection
