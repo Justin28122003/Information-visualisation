@@ -446,40 +446,40 @@ Nadat er vanuit artsen, wetenschappers en deskundigen een brandbrief werd verstu
 <span class="c1"># === Vaste schaal voor percentages ===</span>
 <span class="n">percent_max</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Percent&quot;</span><span class="p">,</span> <span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">plot_map</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">sex</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
-    <span class="n">dff</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">sex</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">metric</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="n">dff</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Geen data beschikbaar voor deze selectie.&quot;</span><span class="p">)</span>
-        <span class="k">return</span>
-    
-    <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Percent&quot;</span><span class="p">:</span>
-        <span class="n">color_range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">percent_max</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">color_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
-    
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
-        <span class="n">dff</span><span class="p">,</span>
-        <span class="n">locations</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;val_display&quot;</span><span class="p">,</span>
-        <span class="n">hover_name</span><span class="o">=</span><span class="s2">&quot;location&quot;</span><span class="p">,</span>
-        <span class="n">color_continuous_scale</span><span class="o">=</span><span class="s2">&quot;Reds&quot;</span><span class="p">,</span>
-        <span class="n">range_color</span><span class="o">=</span><span class="n">color_range</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;val_display&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Prevalentie (</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">},</span>
-        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Mental Disorders – </span><span class="si">{</span><span class="n">sex</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
-        <span class="n">height</span><span class="o">=</span><span class="mi">650</span>
-    <span class="p">)</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
-        <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;natural earth&quot;</span>
-        <span class="p">),</span>
-        <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">year</span> <span class="o">=</span> <span class="mi">2015</span>
+<span class="n">sex</span> <span class="o">=</span> <span class="s1">&#39;Both&#39;</span>
+<span class="n">metric</span> <span class="o">=</span> <span class="s1">&#39;Rate&#39;</span>
 
-<span class="n">plot_map</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="s1">&#39;Both&#39;</span><span class="p">,</span> <span class="s1">&#39;Rate&#39;</span><span class="p">)</span>
+<span class="n">dff</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">sex</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">metric</span><span class="p">)]</span>
+<span class="k">if</span> <span class="n">dff</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Geen data beschikbaar voor deze selectie.&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Percent&quot;</span><span class="p">:</span>
+    <span class="n">color_range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">percent_max</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">color_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
+    <span class="n">dff</span><span class="p">,</span>
+    <span class="n">locations</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;val_display&quot;</span><span class="p">,</span>
+    <span class="n">hover_name</span><span class="o">=</span><span class="s2">&quot;location&quot;</span><span class="p">,</span>
+    <span class="n">color_continuous_scale</span><span class="o">=</span><span class="s2">&quot;Reds&quot;</span><span class="p">,</span>
+    <span class="n">range_color</span><span class="o">=</span><span class="n">color_range</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;val_display&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Prevalentie (</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">},</span>
+    <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Mental Disorders – </span><span class="si">{</span><span class="n">sex</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">650</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;natural earth&quot;</span>
+    <span class="p">),</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
