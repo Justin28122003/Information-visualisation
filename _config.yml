@@ -25,6 +25,8 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+  show_input: false
+  show_output: true
 
 # Add launch buttons
 launch_buttons:

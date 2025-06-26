@@ -61,7 +61,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Sociale Media en Mentale Gezondheid" href="dataset.html" />
+    <link rel="next" title="Dataset" href="dataset.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -176,14 +176,10 @@
             </li>
         </ul>
         <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="dataset.html">Sociale Media en Mentale Gezondheid</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="website.html">Sociale Media en Mentale Gezondheid</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="reflection.html">Sociale Media en Mentale Gezondheid</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="distribution.html">Sociale Media en Mentale Gezondheid</a></li>
-
+<li class="toctree-l1"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="website.html">Mentale Gezondheid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reflection.html">Reflection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distribution.html">Distribution</a></li>
 </ul>
 
     </div>
@@ -414,10 +410,82 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Douwe Maljers (15264424)</p></li>
+<li><p>Justin van Egmond (15011178)</p></li>
+<li><p>Noor Verbrugge (15168298)</p></li>
+</ul>
 <p>Het gebruik van sociale media is de laatste jaren in enorm tempo toegenomen. Alhoewel het gebruik van sociale media de mogelijkheid biedt voor voorbending en entertainment, echter lijkt het gebruik hiervan ook een keerzijde te hebben. Tal van studies tonen aan dat excessief sociale media gebruik samenhangt met verminderde mentale gezondheid. Zo leggen studies het verband tussen sociale mediaverslaving en mentale problemen, als depressie en angststoornissen (Ergün et al., 2023). Desalniettemin zijn er ook studies die het overtuigt zijn, dat dit verband in werkelijk niet bestaat. Zo concludeert Huang (2018) uit een meta-analyse dat het bestaan van dit verband te snel wordt getrokken en dubieus van aard is.
 Nadat er vanuit artsen, wetenschappers en deskundigen een brandbrief werd verstuurd met een oproep tot regelgeving omtrent smartphone bezit en sociale media gebruik, komt de Nederlandse politiek binnenkort met een richtlijn omtrent dit  (NOS, 2025). In hoeverre is de invoering van deze richtlijnen terecht? Zijn richtlijnen alleen voor kinderen nodig of mooeten deze voor de hele samenleving gelden?</p>
 <p>Wereldwijd is de populatie met mentale stoornissen significant gestegen. In de grafiek boven is per land de trend te zien. Vandaar dat dit onderzoek nog meer van belang is. Vrouwen en mannen zijn beide slachtoffer van deze chronische ziekte.</p>
 <p>In dit onderzoek worden beide standpunten onderbouwd aan de hand van data visualisaties, specifiek gericht op sociale mediaverslaving onder studenten. Dit wordt gedaan met behulp van verschillende datasets van diverse groepen studenten. Tevens wordt een dataset van het Institute for Health Metrics and Evaluation gebruikt om de grootschaligheid van het wereldwijde probleem van mentale stoornissen en verminderde mentale gesteldheid in kaart te brengen.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ipywidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dropdown</span><span class="p">,</span> <span class="n">SelectionSlider</span><span class="p">,</span> <span class="n">Layout</span><span class="p">,</span> <span class="n">HBox</span><span class="p">,</span> <span class="n">VBox</span><span class="p">,</span> <span class="n">interactive_output</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycountry</span>
+
+<span class="c1"># === Data inladen ===</span>
+<span class="n">csv_path</span> <span class="o">=</span> <span class="s2">&quot;datasets/IHME_mental_real.csv&quot;</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
+
+<span class="c1"># === Landen omzetten naar ISO3-codes ===</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_iso3</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pycountry</span><span class="o">.</span><span class="n">countries</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">alpha_3</span>
+    <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<span class="n">df2</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">get_iso3</span><span class="p">)</span>
+
+<span class="n">df2</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;val&quot;</span><span class="p">]</span>
+<span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Percent&quot;</span><span class="p">,</span> <span class="s2">&quot;val_display&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">100</span>
+
+<span class="c1"># === Vaste schaal voor percentages ===</span>
+<span class="n">percent_max</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Percent&quot;</span><span class="p">,</span> <span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_map</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">sex</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+    <span class="n">dff</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">sex</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">metric</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">dff</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Geen data beschikbaar voor deze selectie.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;Percent&quot;</span><span class="p">:</span>
+        <span class="n">color_range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">percent_max</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">color_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
+    
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
+        <span class="n">dff</span><span class="p">,</span>
+        <span class="n">locations</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;val_display&quot;</span><span class="p">,</span>
+        <span class="n">hover_name</span><span class="o">=</span><span class="s2">&quot;location&quot;</span><span class="p">,</span>
+        <span class="n">color_continuous_scale</span><span class="o">=</span><span class="s2">&quot;Reds&quot;</span><span class="p">,</span>
+        <span class="n">range_color</span><span class="o">=</span><span class="n">color_range</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;val_display&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Prevalentie (</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">},</span>
+        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Mental Disorders – </span><span class="si">{</span><span class="n">sex</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="mi">650</span>
+    <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+        <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;natural earth&quot;</span>
+        <span class="p">),</span>
+        <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plot_map</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="s1">&#39;Both&#39;</span><span class="p">,</span> <span class="s1">&#39;Rate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -457,7 +525,7 @@ Nadat er vanuit artsen, wetenschappers en deskundigen een brandbrief werd verstu
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Sociale Media en Mentale Gezondheid</p>
+        <p class="prev-next-title">Dataset</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
