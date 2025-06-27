@@ -1,0 +1,160 @@
+Traceback (most recent call last):
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from plotly.offline import init_notebook_mode
+init_notebook_mode(connected=True)
+
+# ⬇️ Dataset inladen
+da = pd.read_csv("datasets/MentalHealthSurvey.csv")
+
+# 🏷️ Kolomnamen toevoegen
+da.columns = [
+    'gender', 'age', 'university', 'degree_level', 'degree_major', 'academic_year',
+    'cgpa', 'residential_status', 'campus_discrimination', 'sports_engagement',
+    'average_sleep', 'study_satisfaction', 'academic_workload', 'academic_pressure',
+    'financial_concerns', 'social_relationships', 'depression', 'anxiety',
+    'isolation', 'future_insecurity', 'stress_relief_activities'
+]
+
+# 🔢 CGPA converteren
+def convert_cgpa(value):
+    if isinstance(value, str) and "-" in value:
+        try:
+            low, high = value.split("-")
+            return (float(low) + float(high)) / 2
+        except:
+            return None
+    try:
+        return float(value)
+    except:
+        return None
+
+da['cgpa'] = da['cgpa'].apply(convert_cgpa)
+
+# 💤 Slaapduur converteren
+def convert_sleep(value):
+    if isinstance(value, str) and "-" in value:
+        try:
+            nums = [int(s.replace("hrs", "").strip()) for s in value.split("-")]
+            return sum(nums) / len(nums)
+        except:
+            return None
+    try:
+        return float(value)
+    except:
+        return None
+
+da['average_sleep'] = da['average_sleep'].apply(convert_sleep)
+
+# 📌 Variabelen en doelvariabele
+features = [
+    'academic_workload',
+    'academic_pressure',
+    'financial_concerns',
+    'study_satisfaction',
+    'social_relationships',
+    'average_sleep'
+]
+target = 'depression'
+
+# 🧼 Data voorbereiden
+reg_df = da[features + [target]].dropna().astype(float)
+X = reg_df[features]
+y = reg_df[target]
+
+# 🧮 Standaardiseren
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# 🔁 Regressie
+model = LinearRegression()
+model.fit(X_scaled, y)
+
+# 📊 Coëfficiënten berekenen
+coefs = pd.Series(model.coef_, index=features).sort_values()
+
+# 🏷️ Labels leesbaar maken
+rename_map = {
+    'academic_workload': 'Studielast',
+    'academic_pressure': 'Academische druk',
+    'financial_concerns': 'Financiële zorgen',
+    'study_satisfaction': 'Tevredenheid over studie',
+    'social_relationships': 'Sociale relaties',
+    'average_sleep': 'Gemiddelde slaapduur'
+}
+coefs.index = coefs.index.map(rename_map)
+
+# 📋 DataFrame voor plot
+bar_df = pd.DataFrame({
+    "Variabele": coefs.index,
+    "Waarde": coefs.values
+})
+
+# 🎨 Kleurgradient berekenen (coolwarm met wit rond 0)
+norm = mcolors.TwoSlopeNorm(
+    vmin=bar_df["Waarde"].min(),
+    vcenter=0,
+    vmax=bar_df["Waarde"].max()
+)
+cmap = plt.colormaps['coolwarm']
+kleuren = [mcolors.to_hex(cmap(norm(w))) for w in bar_df["Waarde"]]
+
+# 📈 Plotten zonder palette of hue
+fig, ax = plt.subplots(figsize=(10, 6))
+bars = sns.barplot(
+    data=bar_df,
+    x="Waarde",
+    y="Variabele",
+    orient="h",
+    ax=ax
+)
+
+# 🎯 Kleuren toepassen per balk
+for bar, kleur in zip(bars.patches, kleuren):
+    bar.set_color(kleur)
+
+# 🎨 Styling
+ax.axvline(0, color='black', linestyle='--')
+ax.set_title("Effect van verklarende factoren op depressiescore")
+ax.set_xlabel("Standaardiseerde regressiecoëfficiënt")
+ax.set_ylabel("Factoren")
+fig.tight_layout()
+plt.show()
+
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[1], line 5[0m
+[1;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mmatplotlib[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpyplot[39;00m [38;5;28;01mas[39;00m [38;5;21;01mplt[39;00m
+[1;32m      4[0m [38;5;28;01mimport[39;00m [38;5;21;01mmatplotlib[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcolors[39;00m [38;5;28;01mas[39;00m [38;5;21;01mmcolors[39;00m
+[0;32m----> 5[0m [38;5;28;01mfrom[39;00m [38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlinear_model[39;00m [38;5;28;01mimport[39;00m LinearRegression
+[1;32m      6[0m [38;5;28;01mfrom[39;00m [38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpreprocessing[39;00m [38;5;28;01mimport[39;00m StandardScaler
+[1;32m      7[0m [38;5;28;01mfrom[39;00m [38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01moffline[39;00m [38;5;28;01mimport[39;00m init_notebook_mode
+
+[0;31mModuleNotFoundError[0m: No module named 'sklearn'
+
