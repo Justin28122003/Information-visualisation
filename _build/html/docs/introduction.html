@@ -554,6 +554,125 @@ document.write(`
 <span class="p">)</span>
 
 <span class="n">figuur</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycountry</span>
+
+<span class="c1"># === Data inladen ===</span>
+<span class="n">csv_path</span> <span class="o">=</span> <span class="s2">&quot;datasets/IHME_mental_real.csv&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
+
+<span class="c1"># === Landen naar ISO3 codes ===</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_iso3</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pycountry</span><span class="o">.</span><span class="n">countries</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">alpha_3</span>
+    <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;iso_alpha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">get_iso3</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;val&quot;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Percent&quot;</span><span class="p">,</span> <span class="s2">&quot;val_display&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">100</span>
+<span class="n">percent_max</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Percent&quot;</span><span class="p">,</span> <span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="c1"># === Parameters ===</span>
+<span class="n">sex</span> <span class="o">=</span> <span class="s2">&quot;Both&quot;</span>
+<span class="n">metric</span> <span class="o">=</span> <span class="s2">&quot;Rate&quot;</span>
+<span class="n">min_val</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">max_val</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="c1"># === Unieke jaren ===</span>
+<span class="n">years</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+
+<span class="c1"># === Frames per jaar ===</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">years</span><span class="p">:</span>
+    <span class="n">dff</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">sex</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">metric</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">dff</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">go</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
+                    <span class="n">locations</span><span class="o">=</span><span class="n">dff</span><span class="p">[</span><span class="s2">&quot;iso_alpha&quot;</span><span class="p">],</span>
+                    <span class="n">z</span><span class="o">=</span><span class="n">dff</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">],</span>
+                    <span class="n">text</span><span class="o">=</span><span class="n">dff</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">],</span>
+                    <span class="n">colorscale</span><span class="o">=</span><span class="s2">&quot;Reds&quot;</span><span class="p">,</span>
+                    <span class="n">zmin</span><span class="o">=</span><span class="n">min_val</span> <span class="k">if</span> <span class="n">metric</span> <span class="o">!=</span> <span class="s2">&quot;Percent&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="n">zmax</span><span class="o">=</span><span class="n">max_val</span> <span class="k">if</span> <span class="n">metric</span> <span class="o">!=</span> <span class="s2">&quot;Percent&quot;</span> <span class="k">else</span> <span class="n">percent_max</span><span class="p">,</span>
+                    <span class="n">colorbar_title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Prevalentie (</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">],</span>
+            <span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># === Initieel figuur voor eerste jaar ===</span>
+<span class="n">first_year</span> <span class="o">=</span> <span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df_first</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">first_year</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">sex</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">metric</span><span class="p">)]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">go</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
+            <span class="n">locations</span><span class="o">=</span><span class="n">df_first</span><span class="p">[</span><span class="s2">&quot;iso_alpha&quot;</span><span class="p">],</span>
+            <span class="n">z</span><span class="o">=</span><span class="n">df_first</span><span class="p">[</span><span class="s2">&quot;val_display&quot;</span><span class="p">],</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">df_first</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">],</span>
+            <span class="n">colorscale</span><span class="o">=</span><span class="s2">&quot;Reds&quot;</span><span class="p">,</span>
+            <span class="n">zmin</span><span class="o">=</span><span class="n">min_val</span> <span class="k">if</span> <span class="n">metric</span> <span class="o">!=</span> <span class="s2">&quot;Percent&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">zmax</span><span class="o">=</span><span class="n">max_val</span> <span class="k">if</span> <span class="n">metric</span> <span class="o">!=</span> <span class="s2">&quot;Percent&quot;</span> <span class="k">else</span> <span class="n">percent_max</span><span class="p">,</span>
+            <span class="n">colorbar_title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Prevalentie (</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">layout</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+        <span class="n">title_text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Mental Disorders – </span><span class="si">{</span><span class="n">sex</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> – </span><span class="si">{</span><span class="n">first_year</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;natural earth&quot;</span><span class="p">),</span>
+        <span class="n">sliders</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;animate&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)],</span> <span class="p">{</span><span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;immediate&quot;</span><span class="p">,</span> <span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span> <span class="s2">&quot;redraw&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}],</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">),</span>
+                    <span class="p">}</span>
+                    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">years</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">&quot;len&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+                <span class="s2">&quot;xanchor&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;yanchor&quot;</span><span class="p">:</span> <span class="s2">&quot;top&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pad&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">},</span>
+                <span class="s2">&quot;currentvalue&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;Jaar: &quot;</span><span class="p">,</span> <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">}},</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="n">updatemenus</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;buttons&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;showactive&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+                <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mf">1.12</span><span class="p">,</span>
+                <span class="s2">&quot;xanchor&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;yanchor&quot;</span><span class="p">:</span> <span class="s2">&quot;top&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pad&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">70</span><span class="p">},</span>
+                <span class="s2">&quot;buttons&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;▶️&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;animate&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span> <span class="s2">&quot;redraw&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s2">&quot;fromcurrent&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}],</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;⏸️&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;animate&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="p">{</span><span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;immediate&quot;</span><span class="p">,</span> <span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}],</span>
+                    <span class="p">},</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">frames</span><span class="o">=</span><span class="n">frames</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
