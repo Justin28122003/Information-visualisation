@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -177,7 +177,7 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pagina.html">Mentale Gezondheid</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reflection.html">Reflection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reflection.html">Reflectie</a></li>
 <li class="toctree-l1"><a class="reference internal" href="distribution.html">Distribution</a></li>
 </ul>
 
@@ -405,10 +405,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mental-health-survey">Mental Health Survey</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#students-social-media-addiction">Students Social Media Addiction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ihme-mental-health-global-data">IHME Mental Health Global Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variabelen-omschrijving">Variabelen omschrijving</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ratio-variabelen">Ratio-variabelen:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinale-variabelen">Ordinale-variabelen:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nominale-variabelen">Nominale-variabelen:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Mental Health Survey</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#social-media-addiction">Social Media Addiction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ihme-mental-health">IHME Mental Health</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#referenties">Referenties</a></li>
@@ -425,32 +428,56 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="dataset">
 <h1>Dataset<a class="headerlink" href="#dataset" title="Link to this heading">#</a></h1>
+<p>Voor de datasets zijn er verschillende datasets gezocht. Uiteindelijk concludeerden we dat er veel uiteenlopende datasets bestaan over dit onderwerp. Veel daarvan richten zich op één specifiek aspect dat correleert met mentale gezondheid. Om toch een antwoord op onze onderzoeksvraag te kunnen geven, hebben we ervoor gekozen om meerdere datasets te gebruiken. Omdat veel openbaar beschikbare datasets zich richten op slechts één aspect van mentale gezondheid zoals slaap, stress of digitaal gedrag, hebben we ervoor gekozen om meerdere datasets in onze analyse te betrekken. Naast de Stack Overflow-dataset gebruikten we ook enquêtegegevens van wereldwijde gebruikers van het IHME om meer te weten te komen over mentale gezondheid wereldwijd.</p>
+<p>De volgende datasets zijn gebruikt.</p>
+<section id="mental-health-survey">
+<h2>Mental Health Survey<a class="headerlink" href="#mental-health-survey" title="Link to this heading">#</a></h2>
+<p>Bestandsnaam: MentalHealthSurvey.csv</p>
+<p>De dataset Student Mental Health Survey is afkomstig van een open dataset die beschikbaar is gesteld via <a class="reference external" href="https://www.kaggle.com/datasets/abdullahashfaqvirk/student-mental-health-survey">Kaggle</a> door gebruiker Abdullah Ashfaq Virk. De dataset bevat resultaten van een enquête onder studenten waarin diverse factoren rond mentaal welzijn worden onderzocht, zoals studiebelasting, financiële zorgen, sociale relaties, woonsituatie en stressverlichtende activiteiten. De antwoorden zijn gekoppeld aan zelfgerapporteerde scores op onder andere depressie, angst en gevoelens van isolatie. Dankzij de combinatie van contextuele, academische en psychologische variabelen is deze dataset goed geschikt voor analyses van mentale gezondheid in relatie tot de leef- en leeromgeving van studenten (Ashfaq Virk, 2022).</p>
+</section>
+<section id="students-social-media-addiction">
+<h2>Students Social Media Addiction<a class="headerlink" href="#students-social-media-addiction" title="Link to this heading">#</a></h2>
+<p>Bestandsnaam: Students Social Media Addiction.csv</p>
+<p>De dataset Mental Health Survey is afkomstig van een online onderzoeksproject dat als open dataset beschikbaar is gesteld via <a class="reference external" href="https://www.kaggle.com/datasets/pratyushpuri/students-social-media-addiction">Kaggle</a>. Het betreft een kleinschalige enquête onder studenten waarin uiteenlopende factoren zoals academische druk, discriminatie op de campus, sociale relaties en copingmechanismen worden bevraagd. Deze factoren zijn vervolgens gerelateerd aan zelfgerapporteerde gevoelens van depressie, angst en onzekerheid over de toekomst. De combinatie van sociaal-demografische kenmerken, gedragingen en mentale gezondheidsuitkomsten maakt deze dataset waardevol voor het analyseren van samenhangen tussen omgevingsfactoren en mentaal welzijn bij studenten.</p>
+</section>
+<section id="ihme-mental-health-global-data">
+<h2>IHME Mental Health Global Data<a class="headerlink" href="#ihme-mental-health-global-data" title="Link to this heading">#</a></h2>
+<p>Bestandsnaam: IHME_mental_real.csv</p>
+<p>De dataset van het  Institute for Health Metrics and Evaluation is een dataset van de GBD (Global Burden of Disease) studie uit 2021. Deze studie is het grootste en meest uitgebreide onderzoek om gezondheidsverlies op verschillende plaatsen en in de loop van de tijd te kwantificeren. Zo vormt de gevonden data een krachtig middel om inzichten te creëren voor inzichten omtrent globale gezondheidstrends en -uitdagingen (Global Burden of Disease (GBD), n.d.). De dataset is gevonden via <a class="reference external" href="https://vizhub.healthdata.org/gbd-results/">IHME Mental Health Global Data</a> , waar de data gefilterd is op de prevalentie van mentale stoornissen, waarin verschillende seksen en verschillende statistische uitdrukkingen meegenomen zijn, waaronder de ‘rate’, die omschrijft hoeveel mensen op de 1000 naar schatting een mentale stoornis hebben en de schatting van het landelijk percentage van deze prevalentie van mentale stoornissen.</p>
+</section>
 <section id="variabelen-omschrijving">
 <h2>Variabelen omschrijving<a class="headerlink" href="#variabelen-omschrijving" title="Link to this heading">#</a></h2>
-<section id="ratio-variabelen">
-<h3>Ratio-variabelen:<a class="headerlink" href="#ratio-variabelen" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h3>Mental Health Survey<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Age: Leeftijd van respondent</p></li>
-<li><p>Depression: Score op depressieschaal</p></li>
-<li><p>Academic_pressure: Ervaren druk door academische verplichtingen</p></li>
-<li><p>Financial_concerns: Ervaren financiële zorgen</p></li>
-<li><p>Relationship_issues: Problemen in persoonlijke relaties</p></li>
-<li><p>Sleep_quality: Waardering van slaapkwaliteit</p></li>
+<li><p><strong>Ratio variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">age</span></code>, <code class="docutils literal notranslate"><span class="pre">study_satisfaction</span></code>, <code class="docutils literal notranslate"><span class="pre">academic_workload</span></code>, <code class="docutils literal notranslate"><span class="pre">academic_pressure</span></code>, <code class="docutils literal notranslate"><span class="pre">financial_concerns</span></code>, <code class="docutils literal notranslate"><span class="pre">social_relationships</span></code>, <code class="docutils literal notranslate"><span class="pre">depression</span></code>, <code class="docutils literal notranslate"><span class="pre">anxiety</span></code>, <code class="docutils literal notranslate"><span class="pre">isolation</span></code>, <code class="docutils literal notranslate"><span class="pre">future_insecurity</span></code></p></li>
+<li><p><strong>Ordinale variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">cgpa</span></code>, <code class="docutils literal notranslate"><span class="pre">academic_year</span></code></p></li>
+<li><p><strong>Nominale variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">gender</span></code>, <code class="docutils literal notranslate"><span class="pre">university</span></code>, <code class="docutils literal notranslate"><span class="pre">degree_level</span></code>, <code class="docutils literal notranslate"><span class="pre">degree_major</span></code>, <code class="docutils literal notranslate"><span class="pre">residential_status</span></code>, <code class="docutils literal notranslate"><span class="pre">campus_discrimination</span></code>, <code class="docutils literal notranslate"><span class="pre">sports_engagement</span></code>, <code class="docutils literal notranslate"><span class="pre">stress_relief_activities</span></code></p></li>
 </ul>
 </section>
-<section id="ordinale-variabelen">
-<h3>Ordinale-variabelen:<a class="headerlink" href="#ordinale-variabelen" title="Link to this heading">#</a></h3>
+<section id="social-media-addiction">
+<h3>Social Media Addiction<a class="headerlink" href="#social-media-addiction" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Mental_health_effect: Hoeveel invloed mentale gezondheid heeft op het dagelijks functioneren</p></li>
-<li><p>Academic_performance: Beoordeling van academische prestaties</p></li>
+<li><p><strong>Ratio variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">Age</span></code>, <code class="docutils literal notranslate"><span class="pre">Avg_Daily_Usage_Hours</span></code>, <code class="docutils literal notranslate"><span class="pre">Sleep_Hours_Per_Night</span></code>, <code class="docutils literal notranslate"><span class="pre">Mental_Health_Score</span></code>, <code class="docutils literal notranslate"><span class="pre">Addicted_Score</span></code></p></li>
+<li><p><strong>Nominale variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">Gender</span></code>, <code class="docutils literal notranslate"><span class="pre">Academic_Level</span></code>, <code class="docutils literal notranslate"><span class="pre">Country</span></code>, <code class="docutils literal notranslate"><span class="pre">Most_Used_Platform</span></code>, <code class="docutils literal notranslate"><span class="pre">Affects_Academic_Performance</span></code>, <code class="docutils literal notranslate"><span class="pre">Relationship_Status</span></code></p></li>
+<li><p><strong>Ordinale variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">Conflicts_Over_Social_Media</span></code></p></li>
 </ul>
 </section>
-<section id="nominale-variabelen">
-<h3>Nominale-variabelen:<a class="headerlink" href="#nominale-variabelen" title="Link to this heading">#</a></h3>
+<section id="ihme-mental-health">
+<h3>IHME Mental Health<a class="headerlink" href="#ihme-mental-health" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Gender: Geslacht van de student</p></li>
-<li><p>University_support: Vindt dat de universiteit voldoende ondersteuning biedt (ja / nee)</p></li>
-<li><p>Social_activity: Deelname aan sociale activiteiten (ja / nee)</p></li>
+<li><p><strong>Ratio variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">val</span></code>, <code class="docutils literal notranslate"><span class="pre">upper</span></code>, <code class="docutils literal notranslate"><span class="pre">lower</span></code></p></li>
+<li><p><strong>Nominale variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">measure</span></code>, <code class="docutils literal notranslate"><span class="pre">location</span></code>, <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">age</span></code>, <code class="docutils literal notranslate"><span class="pre">cause</span></code>, <code class="docutils literal notranslate"><span class="pre">metric</span></code></p></li>
+<li><p><strong>Ordinale variabelen</strong>:<br />
+<code class="docutils literal notranslate"><span class="pre">year</span></code></p></li>
 </ul>
 </section>
 </section>
@@ -527,10 +554,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mental-health-survey">Mental Health Survey</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#students-social-media-addiction">Students Social Media Addiction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ihme-mental-health-global-data">IHME Mental Health Global Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variabelen-omschrijving">Variabelen omschrijving</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ratio-variabelen">Ratio-variabelen:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinale-variabelen">Ordinale-variabelen:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nominale-variabelen">Nominale-variabelen:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Mental Health Survey</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#social-media-addiction">Social Media Addiction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ihme-mental-health">IHME Mental Health</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#referenties">Referenties</a></li>

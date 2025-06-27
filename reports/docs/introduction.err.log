@@ -1,0 +1,163 @@
+Traceback (most recent call last):
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/asyncio/base_events.py", line 653, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Users/justin_v_egmond/miniconda3/envs/SP/lib/python3.11/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import pandas as pd
+import plotly.graph_objects as go
+import pycountry
+
+# === Gegevens inladen ===
+pad_csv = "datasets/IHME_mental_real.csv"
+gegevens = pd.read_csv(pad_csv)
+
+# === Landen omzetten naar ISO3-codes ===
+def naar_iso3(naam):
+    try:
+        return pycountry.countries.lookup(naam).alpha_3
+    except LookupError:
+        return None
+
+gegevens["landcode"] = gegevens["location"].apply(naar_iso3)
+
+# === Waarden als percentages weergeven ===
+gegevens["percentage"] = gegevens["val"]
+gegevens.loc[gegevens["metric"] == "Percent", "percentage"] *= 100
+gegevens.loc[gegevens["metric"] == "Rate", "percentage"] *= 100
+
+# === Parameters ===
+geslachten = ["Both", "Female", "Male"]
+jaren = sorted(gegevens["year"].unique())
+min_waarde = 0
+max_waarde = gegevens["percentage"].max()
+
+# === Kaartlagen aanmaken voor alle combinaties van geslacht en jaar ===
+kaartlagen = []
+zichtbaarheid = {}
+for geslacht in geslachten:
+    for jaar in jaren:
+        sleutel = f"{geslacht}_{jaar}"
+        selectie = gegevens[(gegevens["sex"] == geslacht) & (gegevens["year"] == jaar)]
+        trace = go.Choropleth(
+            locations=selectie["landcode"],
+            z=selectie["percentage"],
+            text=selectie["location"],
+            colorscale="Reds",
+            zmin=min_waarde,
+            zmax=max_waarde,
+            colorbar_title="Prevalentie (%)",
+            visible=False,
+            name=sleutel,
+        )
+        kaartlagen.append(trace)
+        zichtbaarheid[sleutel] = len(kaartlagen) - 1
+
+# === Startinstellingen ===
+start_geslacht = "Both"
+start_jaar = jaren[0]
+start_sleutel = f"{start_geslacht}_{start_jaar}"
+kaartlagen[zichtbaarheid[start_sleutel]].visible = True
+
+# === Dropdownmenu voor geslacht (labels in het Nederlands) ===
+keuzemenu_knoppen = []
+for geslacht in geslachten:
+    label_nl = {
+        "Both": "Beide",
+        "Female": "Vrouw",
+        "Male": "Man"
+    }[geslacht]
+    
+    knop = dict(
+        label=label_nl,
+        method="update",
+        args=[
+            {"visible": [False] * len(kaartlagen)},
+            {"title": f"Mentale stoornissen – {label_nl}"},
+        ],
+    )
+    for jaar in jaren:
+        sleutel = f"{geslacht}_{jaar}"
+        index = zichtbaarheid.get(sleutel)
+        if jaar == start_jaar and index is not None:
+            knop["args"][0]["visible"][index] = True
+    keuzemenu_knoppen.append(knop)
+
+# === Sliderstappen per jaar ===
+slider_stappen = []
+for jaar in jaren:
+    stap = dict(
+        method="update",
+        args=[
+            {"visible": [False] * len(kaartlagen)},
+            {"title": f"Mentale stoornissen – Beide"},  # Defaulttitel blijft consistent
+        ],
+        label=str(jaar),
+    )
+    sleutel = f"{start_geslacht}_{jaar}"
+    index = zichtbaarheid.get(sleutel)
+    if index is not None:
+        stap["args"][0]["visible"][index] = True
+    slider_stappen.append(stap)
+
+# === Figuur opbouwen ===
+figuur = go.Figure(
+    data=kaartlagen,
+    layout=go.Layout(
+        title_text="Mentale stoornissen – Beide",
+        geo=dict(showframe=False, showcoastlines=True, projection_type="natural earth"),
+        updatemenus=[
+            dict(
+                active=0,
+                buttons=keuzemenu_knoppen,
+                x=0.05,
+                y=1.12,
+                xanchor="left",
+                yanchor="top",
+            )
+        ],
+        sliders=[
+            dict(
+                active=0,
+                pad={"t": 50},
+                x=0.1,
+                len=0.8,
+                xanchor="left",
+                yanchor="top",
+                currentvalue={"prefix": "Jaar: ", "font": {"size": 16}},
+                steps=slider_stappen,
+            )
+        ]
+    )
+)
+
+figuur.show()
+
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[1], line 3[0m
+[1;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m
+[1;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01mgraph_objects[39;00m [38;5;28;01mas[39;00m [38;5;21;01mgo[39;00m
+[0;32m----> 3[0m [38;5;28;01mimport[39;00m [38;5;21;01mpycountry[39;00m
+[1;32m      5[0m [38;5;66;03m# === Gegevens inladen ===[39;00m
+[1;32m      6[0m pad_csv [38;5;241m=[39m [38;5;124m"[39m[38;5;124mdatasets/IHME_mental_real.csv[39m[38;5;124m"[39m
+
+[0;31mModuleNotFoundError[0m: No module named 'pycountry'
+
